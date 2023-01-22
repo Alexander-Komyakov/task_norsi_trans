@@ -23,7 +23,7 @@
 `journalctl --since «2023-01-20»` -u sshd. Таким образом мы вычислили кто подключался и вносил
 изменения в файл, с помощью какой программы они производились, время изменения и т. д.
 Теперь автоматизируем эти действия, т. к. у нас 46 серверов.
-```
+```bash
 addresses_servers=("192.168.n.m" "192.168.n.m" "2.21.17.194")
 user_name="user01"
 
@@ -36,7 +36,7 @@ done
 требуемые нам команды.
 
 Полный код:
-```
+```bash
 #перечисляем адреса серверов
 addresses_servers=("192.168.n.m" "192.168.n.m" "2.21.17.194")
 #имя пользователя для подключения по ssh
@@ -117,7 +117,7 @@ FOR адрес IN адреса_серверов_убунту:
 Ansible, нам требуется только правильно его использовать. Помимо Ansible имеются другие
 инструменты, но в вашей компании используется Ansible, а значит именно он выбран и мы будет
 его придерживаться.
-```
+```yaml
 ---
 - name: "Installed package2 in ubuntu 18.04 and 20.04 (local rep)"
   hosts: ubuntu
@@ -146,19 +146,19 @@ Ansible, нам требуется только правильно его исп
 └── install_package.yml
 2 directories, 6 files
 ```
-```
+```yaml
 ansible.cfg
 [defaults]
-host_key_checking = false
-inventory = hosts.txt
+  host_key_checking = false
+  inventory = hosts.txt
 ```
 
 centos76
-```
+```yaml
 ---
 ansible_user: user01
 ```
-```
+```yaml
 ubuntu1804
 ---
 ansible_user: user01
@@ -167,18 +167,18 @@ hosts.txt
 Добавляем строки и указываем адреса наших хостов, ubuntu18041, ubuntu18042 и т.д.
 ```
 [ubuntu1804]
-ubuntu18041 ansible_host=127.0.0.1
+  ubuntu18041 ansible_host=127.0.0.1
 [ubuntu2004]
-ubuntu20041 ansible_host=127.0.0.1
+  ubuntu20041 ansible_host=127.0.0.1
 [ubuntu:children]
-ubuntu1804
-ubuntu2004
+  ubuntu1804
+  ubuntu2004
 [centos76]
-centos761 ansible_host=127.0.0.1
+  centos761 ansible_host=127.0.0.1
 ```
 
 ## Задание №1
-```
+```yaml
 ---
 - name: Check changed files /etc/sysconfig/iptables and /etc/nftables.conf
   hosts: ubuntu centos76

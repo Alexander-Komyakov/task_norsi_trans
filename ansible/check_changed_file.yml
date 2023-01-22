@@ -1,0 +1,41 @@
+---
+- name: Check changed files /etc/sysconfig/iptables and /etc/nftables.conf
+  hosts: ubuntu centos76
+  become: yes
+
+  vars:
+    iptables_mtime: 0
+    nftables_mtime: 0
+
+  tasks:
+  - name: "Get info file iptables"
+    stat:
+      path: /etc/sysconfig/iptables
+    register: status_file_iptables
+
+  - name: "Check exist file iptables"
+    set_fact:
+      iptables_mtime: "{{ status_file_iptables.stat.mtime }}"
+    when: status_file_iptables.stat.exists
+
+  - name: "Check changed file iptables"
+    debug:
+      msg: "file /etc/sysconfig/iptables updates in server {{ ansible_ssh_host }}"
+    when: (iptables_mtime | int + 18000 > {{ ansible_date_time.epoch | int }}) and (iptables_mtime != 0)
+
+  #DRY - DON'T REPEAT YOUR SELF!
+  - name: "Get info file nftables"
+    stat:
+      path: /etc/nftables.conf
+    register: status_file_nftables
+
+  - name: "Check exist file nftables"
+    set_fact:
+      nftables_mtime: "{{ status_file_nftables.stat.mtime }}"
+    when: status_file_nftables.stat.exists
+
+  - name: "Check changed file nftables"
+    debug:
+      msg: "file /etc/nftables.conf updates in server {{ ansible_ssh_host }}"
+    when: (nftables_mtime | int + 18000 > {{ ansible_date_time.epoch | int }}) and (nftables_mtime != 0)
+...

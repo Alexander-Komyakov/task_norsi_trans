@@ -2,20 +2,16 @@
 - name: "Installed package2 in ubuntu 18.04 and 20.04 (local rep)"
   hosts: ubuntu
   become: yes
-  become_user: 
-
 
   tasks:
   - name: "Installed package2"
-    apt:    name=package2 state=latest
+    apt:  name=package2 state=latest
 
 - name: "Install pckg2 in centos7.6 (local rep)"
-  hosts: all
+  hosts: centos76
   become: yes
-  ansible_become: yes
-  ansible_become_password: yes
 
   tasks:
   - name: "Installed pckg2"
-    pacman: name=vim state=latest
+    yum: name=pckg2 state=latest
 ...
